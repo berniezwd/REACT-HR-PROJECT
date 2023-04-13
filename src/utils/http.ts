@@ -1,5 +1,8 @@
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
+import store from '../store'
+import { message } from 'antd'
+import { clearToken } from '../store/modules/user'
 
 const instance = axios.create({
   baseURL: 'http://api.h5ke.top/',
@@ -7,23 +10,31 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(
-  function (config) {
+  (config) => {
+    if (config.headers) {
+      config.headers['Content-Type'] = 'application/json'
+      config.headers.Authorization = store.getState().user.token
+    }
     return config
   },
-  function (error) {
+  (error) => {
     return Promise.reject(error)
   },
 )
 
 instance.interceptors.response.use(
-  function (response) {
-    if (response.data.errcode === 0) {
-      return response.data
-    } else {
+  (response) => {
+    if (response.data.errmsg === 'token error') {
+      message.error(`token error`)
+      store.dispatch(clearToken())
+      setTimeout(() => {
+        window.location.replace(`/login`)
+      }, 1000)
       return Promise.reject(response.data)
     }
+    return response.data
   },
-  function (error) {
+  (error) => {
     alert(`请求失败：${error.message}`)
     return Promise.reject(error)
   },

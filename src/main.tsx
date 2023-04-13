@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
 import './assets/styles/reset.less'
 import './assets/styles/iconfont.less'
 import './assets/styles/common.less'
@@ -12,7 +11,7 @@ import store from './store'
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Suspense>
     <Provider store={store}>
-      <RouterProvider router={router}></RouterProvider>,
+      <RouterProvider router={router}></RouterProvider>
     </Provider>
   </Suspense>,
 )

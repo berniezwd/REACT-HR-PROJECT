@@ -1,9 +1,6 @@
-import { useState } from 'react'
-
+import { Outlet } from 'react-router-dom'
+import BeforeEach from './components/BeforeEach'
 function App() {
-  const [count, setCount] = useState(0)
-
-  return <div>App</div>
+  return <BeforeEach>{<Outlet></Outlet>}</BeforeEach>
 }
-
 export default App

@@ -24,7 +24,13 @@ const userSlice = createSlice({
     },
     clearToken(state) {
       state.token = ''
+      state.infos = {}
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateTokenAction.fulfilled, (state, action: Record<string, any>) => {
+      state.infos = action.payload.infos // 在这里同步修改state的值
+    })
   },
 })
 
@@ -33,8 +39,11 @@ export const loginAction = createAsyncThunk('user/loginAction', async (payload: 
   const res = await http.post('/users/login', payload, { method: 'post' })
   return res
 })
-// 异步action -> 获取用户信息
-export const infosAction = createAsyncThunk('user/infosAction', async () => {
+// 异步action -> 1.更新token 2.获取用户信息后 3.最后更新用户信息
+export const updateTokenAction = createAsyncThunk('user/updateTokenAction', async (token?: string) => {
+  if (token) {
+    updateToken(token)
+  }
   const res = await http.get('/users/infos')
   return res
 })
