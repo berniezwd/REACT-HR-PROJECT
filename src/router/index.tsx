@@ -100,6 +100,8 @@ export const routes: RouteObject[] = [
   },
 ]
 
-const router = createHashRouter(routes)
+const router = createHashRouter(routes, {
+  basename: '/',
+})
 
 export default router
